@@ -7,11 +7,11 @@ from .operators import apply_squeezing_operator, optimal_theta
 
 def calculate_fisher_information(N, sensing_time, is_entangled):
     """
-    Calculate Fisher Information.
+    Calculate Fisher Information
     """
     return N**2 * sensing_time**2 if is_entangled else N * sensing_time**2
 
-def calculate_phase_variances(N_max, omega):
+def calculate_phase_variances(N_max, omega, B, tau_sense):
     """
     Calculate phase variances for separable and entangled states.
     """
@@ -39,14 +39,13 @@ def calculate_phase_variances(N_max, omega):
       #   tau_sense = T_total - tau_prep - tau_meas
         tau_prep = 1.0
         tau_meas = 1.0
-        tau_sense = 1.0
         if N == N_max:
            print(tau_prep, tau_meas,  tau_sense)
         coherent_state = generate_coherent_state(j)
         if N == N_max:
            final_states.append(coherent_state)
         # Separable strategy
-        H_sense = omega * 0.1 * Jz
+        H_sense = omega * B * Jz
         evolved_coherent_state = (-1j * H_sense * tau_sense).expm() * coherent_state
         phase_var_sql = qt.variance(Jy, evolved_coherent_state)
         phase_meas_sql = qt.expect(Jy, evolved_coherent_state)

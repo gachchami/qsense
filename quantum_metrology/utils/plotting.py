@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 
-def plot_results(N_max, phase_variance_sql, phase_variance_hl, phase_meas_sql, phase_meas_hl, omega):
+def plot_results(N_max, phase_variance_sql, phase_variance_hl, phase_meas_sql, phase_meas_hl, omega, tau_sense):
     """
     Plot phase variances and metrological gain.
     """
@@ -24,8 +24,8 @@ def plot_results(N_max, phase_variance_sql, phase_variance_hl, phase_meas_sql, p
 
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
-    plt.plot(x, phase_meas_sql/omega, label="SQL", linestyle="--", marker="o")
-    plt.plot(x, phase_meas_hl/omega, label="HL", linestyle="-", marker="x")
+    plt.plot(x, phase_meas_sql/(omega * tau_sense), label="SQL", linestyle="--", marker="o")
+    plt.plot(x, phase_meas_hl/(omega * tau_sense), label="HL", linestyle="-", marker="x")
     plt.title("B")
     plt.xlabel("Number of Particles (N)")
     plt.ylabel("Magnetic Field")
