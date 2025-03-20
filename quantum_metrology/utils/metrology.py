@@ -1,5 +1,6 @@
 # utils/metrology.py
 
+import math
 import numpy as np
 import qutip as qt
 from .states import generate_coherent_state, get_squeezed_state
@@ -17,8 +18,8 @@ def calculate_phase_variances(N_max, omega, B, tau_sense):
     """
     phase_variance_sql = []
     phase_variance_hl = []
-    phase_measured_sql = []
-    phase_measured_hl = []
+    B_sql = []
+    B_hl = []
     final_states = []
     for N in range(1, N_max + 1):
         j = N / 2
@@ -26,6 +27,7 @@ def calculate_phase_variances(N_max, omega, B, tau_sense):
         Jx = qt.jmat(j, 'x')
         Jy = qt.jmat(j, 'y')
         Jz = qt.jmat(j, 'z')
+        print(Jz)
     
         optimal_theta_j = optimal_theta(N)
         mu = optimal_theta_j * 2
@@ -48,9 +50,12 @@ def calculate_phase_variances(N_max, omega, B, tau_sense):
         H_sense = omega * B * Jz
         evolved_coherent_state = (-1j * H_sense * tau_sense).expm() * coherent_state
         phase_var_sql = qt.variance(Jy, evolved_coherent_state)
-        phase_meas_sql = qt.expect(Jy, evolved_coherent_state)
+        exp_Jy_sql = qt.expect(Jy, evolved_coherent_state)
+        exp_Jx_sql = qt.expect(Jx, evolved_coherent_state)
+        exp_Jz_sql = qt.expect(Jz, evolved_coherent_state)
+        phase_meas_sql = math.asin(exp_Jy_sql/ math.sqrt((exp_Jx_sql * exp_Jx_sql + exp_Jy_sql * exp_Jy_sql + exp_Jz_sql * exp_Jz_sql)))
         phase_variance_sql.append(phase_var_sql)
-        phase_measured_sql.append(phase_meas_sql)
+        B_sql.append(phase_meas_sql)
         if N == N_max:
            final_states.append(evolved_coherent_state)
 
@@ -65,11 +70,17 @@ def calculate_phase_variances(N_max, omega, B, tau_sense):
            final_states.append(squeezed_state)
         evolved_squeezed_state = (-1j * H_sense * tau_sense).expm() * squeezed_state
         phase_var_hl = qt.variance(Jy, evolved_squeezed_state)
-        phase_meas_hl = qt.expect(Jy, evolved_squeezed_state)
+        exp_Jy_hl = qt.expect(Jy, evolved_squeezed_state)
+        print(f"N: {N}, hl_exp: {exp_Jy_hl}, sql_exp: {exp_Jy_sql}")
+        exp_Jx_hl = qt.expect(Jx, evolved_squeezed_state)
+        exp_Jz_hl = qt.expect(Jz, evolved_squeezed_state)
+        temp_hl = math.sqrt(exp_Jx_hl * exp_Jx_hl + exp_Jy_hl * exp_Jy_hl + exp_Jz_hl * exp_Jz_hl)
+        
+        phase_meas_hl = math.asin(exp_Jy_hl/ temp_hl)
         phase_variance_hl.append(phase_var_hl)
-        phase_measured_hl.append(phase_meas_hl)
+        B_hl.append(phase_meas_hl)
 
         if N == N_max:
            final_states.append(evolved_squeezed_state)
         
-    return np.array(phase_variance_sql), np.array(phase_variance_hl), np.array(phase_measured_sql), np.array(phase_measured_hl), final_states
+    return np.array(phase_variance_sql), np.array(phase_variance_hl), np.array(B_sql), np.array(B_hl), final_states

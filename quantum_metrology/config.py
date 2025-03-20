@@ -6,4 +6,4 @@ TAU_SENSE = 0.5
 TAU_SENSE_FRACTION = 1 - TAU_PREP_FRACTION - TAU_MEAS_FRACTION
 N_MAX = 100  # Maximum number of particles
 OMEGA = 3.0  # Frequency for sensing
-B = 0.5
+B = 28.7
