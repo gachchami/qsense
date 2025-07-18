@@ -1,9 +1,23 @@
 # config.py
-T_TOTAL = 1.0  # Total fixed time for the experiment
-TAU_PREP_FRACTION = 0.1  # Preparation time fraction
-TAU_MEAS_FRACTION = 0.05  # Measurement time fraction
-TAU_SENSE = 0.5
-TAU_SENSE_FRACTION = 1 - TAU_PREP_FRACTION - TAU_MEAS_FRACTION
-N_MAX = 100  # Maximum number of particles
-OMEGA = 3.0  # Frequency for sensing
-B = 28.7
+"""Configuration parameters for quantum metrology simulation.
+
+This module defines the key parameters used throughout the quantum metrology
+simulation, including time scales, particle numbers and physical constants.
+"""
+from typing import Final
+
+# Total fixed time for the experiment
+T_TOTAL: Final[float] = 1.0
+
+# Time allocation fractions
+TAU_PREP_FRACTION: Final[float] = 0.1  # Preparation time fraction
+TAU_MEAS_FRACTION: Final[float] = 0.05  # Measurement time fraction
+TAU_SENSE_FRACTION: Final[float] = 1 - TAU_PREP_FRACTION - TAU_MEAS_FRACTION
+
+# Actual sensing time
+TAU_SENSE: Final[float] = 0.5
+
+# System parameters
+N_MAX: Final[int] = 1000  # Maximum number of particles
+OMEGA: Final[float] = 1.0  # Frequency for sensing
+# B: Final[float] = 28.7  # Magnetic field strength
