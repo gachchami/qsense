@@ -7,12 +7,12 @@ representation of quantum states on the Bloch sphere.
 
 from typing import List, Tuple
 
-from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 – needed for 3-D backen
 import numpy as np
 import qutip as qt
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.figure import Figure
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 – needed for 3-D backen
 from scipy.special import binom
 
 from .metrology import Experiment
@@ -154,7 +154,7 @@ def qobj_to_coeffs(qobj: qt.Qobj) -> np.ndarray:
     return vec[::-1]  # reverse → −J … +J
 
 
-def plot_all(J: int, experiments: List[Experiment]):
+def plot_husimi_all_states(J: int, experiments: List[Experiment]):
     states = [
         experiments[-1].coherent_state, experiments[-1].evolved_coherent_state,
         experiments[-1].squeezed_state, experiments[-1].evolved_squeezed_state

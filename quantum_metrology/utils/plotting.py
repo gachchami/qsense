@@ -15,11 +15,6 @@ import qutip as qt
 from .metrology import Experiment, QState
 
 
-def mean_component(j: float, state, axis: str) -> float:
-    """Compute <J_axis> expectation value."""
-    return float(qt.expect(axis, state))
-
-
 def mean(j: int, state: QState) -> float:
     """Compute |<J>| = sqrt(<Jx>^2 + <Jy>^2 + <Jz>^2)."""
     Jx = qt.jmat(j, 'x')
@@ -32,7 +27,7 @@ def mean(j: int, state: QState) -> float:
     return np.linalg.norm(np.array([mx, my, mz], dtype=float))
 
 
-def plot_noise(N_max: int, experiments: List[Experiment]) -> None:
+def plot_noise_reduction(N_max: int, experiments: List[Experiment]) -> None:
     """Plot phase noise.
     
     Creates visualizations of the phase similar to what Kitagawa and Ueda demonstrated.
@@ -112,7 +107,7 @@ def plot_sensitivity(N_max: int, experiments: List[Experiment]) -> None:
     plt.plot(j / 2, phase_sensitivity_hl, label="SSS", linestyle="-",
              marker="x")
     plt.yscale('log')
-    plt.title("Sensitivity ")
+    plt.title("Sensitivity")
     plt.xlabel("Number of Particles (N)")
     plt.ylabel("Phase Sensitivity")
     plt.legend()
