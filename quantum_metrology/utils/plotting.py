@@ -31,7 +31,6 @@ def plot_noise_reduction(N_max: int, experiments: List[Experiment]) -> None:
     """Plot phase noise.
     
     Creates visualizations of the phase similar to what Kitagawa and Ueda demonstrated.
-    x axis = [2,5,10,50,100]
     
     Args:
         N_max: Maximum number of particles considered
@@ -52,9 +51,9 @@ def plot_noise_reduction(N_max: int, experiments: List[Experiment]) -> None:
     plt.subplot(1, 2, 1)
 
     plt.plot(j, j / 2, label="J/2", linestyle="-", linewidth=2)
-    plt.plot(j, phase_noise_sql, label="Coherent state", color="red",
-             marker="x", markersize="4", linewidth=0)
-    plt.plot(j, phase_noise_hl, label="OAT", linestyle="--", marker="x",
+    plt.plot(j, phase_noise_sql, label="CSS", color="red", marker="x",
+             markersize="4", linewidth=0)
+    plt.plot(j, phase_noise_hl, label="OAT SSS", linestyle="--", marker="x",
              markersize="4")
     plt.plot(j, (1 / 2) * ((j / 3)**(1 / 3)), label="1/2(J/3)^1/3",
              linestyle="-", linewidth=2)
@@ -83,7 +82,8 @@ def plot_sensitivity(N_max: int, experiments: List[Experiment]) -> None:
         List[Experiment]: List of all the experiement objects
     """
     n = np.arange(1, N_max + 1)
-    j = n / 2
+
+    ref_hl = 1 / (n**(5 / 6))
     phase_sensitivity_sql = []
     phase_sensitivity_hl = []
 
@@ -99,13 +99,18 @@ def plot_sensitivity(N_max: int, experiments: List[Experiment]) -> None:
 
         evolved_sss_sensitivity = math.sqrt(
             experiment.evolved_squeezed_state.variance) / mean(
-                experiment.N / 2, experiment.evolved_squeezed_state)
+                experiment.N / 2, experiment.squeezed_state)
         phase_sensitivity_hl.append(evolved_sss_sensitivity)
+
     plt.subplot(1, 2, 1)
-    plt.plot(j / 2, phase_sensitivity_sql, label="CSS", linestyle="--",
-             marker="x", markersize="1")
-    plt.plot(j / 2, phase_sensitivity_hl, label="SSS", linestyle="-",
-             marker="x")
+    plt.plot(n, 1 / np.sqrt(n), label="SQL 1/sqrt(N)", linestyle="--",
+             linewidth=2)
+    plt.plot(n, phase_sensitivity_sql, label="OAT CSS", marker="x",
+             markersize="4", linewidth=0)
+    plt.plot(n, phase_sensitivity_hl, label="OAT SSS", marker="o",
+             markersize="4", linewidth=0)
+    plt.plot(n, ref_hl, label="1 / (n**(5 / 6))", linestyle="-", linewidth=2)
+
     plt.yscale('log')
     plt.title("Sensitivity")
     plt.xlabel("Number of Particles (N)")

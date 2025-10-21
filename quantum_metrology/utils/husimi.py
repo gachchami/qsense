@@ -12,7 +12,7 @@ import numpy as np
 import qutip as qt
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
-from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 – needed for 3-D backen
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.special import binom
 
 from .metrology import Experiment
@@ -170,6 +170,5 @@ def plot_husimi_all_states(J: int, experiments: List[Experiment]):
         plot_husimi_bloch(J=J, state=qobj_to_coeffs(states[i]), ax=axis[i],
                           title=titles[i])
 
-    #axis.set_title("Husimi-Q on Bloch sphere", fontsize=14)
     plt.tight_layout()
     plt.show()

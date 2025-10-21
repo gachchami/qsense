@@ -2,15 +2,14 @@
 """Quantum operators module for metrology simulations.
 
 This module provides functions for generating and manipulating quantum operators
-used in metrology simulations, such as angular momentum operators and
-squeezing operators.
+used in metrology simulations
 """
 
 import numpy as np
 from qutip import Qobj
 
 
-def calculate_correction_angle(j: int, mu: float) -> float:
+def _calculate_correction_angle(j: int, mu: float) -> float:
     A = 1 - (np.cos(mu)**(2 * j - 2))
     B = 4 * np.sin(mu / 2) * (np.cos(mu / 2)**(2 * j - 2))
 
@@ -26,7 +25,7 @@ def calculate_correction_angle(j: int, mu: float) -> float:
 def get_squeezing_operator(squeezing_strength: float, J: Qobj) -> Qobj:
     """Apply the squeezing operator to the quantum state.
     
-    Creates the squeezing operator with given strength and returns the operator.
+    Creates the squeezing operator with given strength and returns the operator as QObj.
     
     Args:
         squeezing_strength: Parameter controlling the amount of squeezing

@@ -1,8 +1,7 @@
 # utils/metrology.py
 """Quantum metrology calculation module.
 
-This module provides functions for calculating quantum Fisher information,
-phase variances, and other metrics used in quantum metrology simulations.
+This module provides functions for calculating_phase noise
 """
 
 from dataclasses import dataclass
@@ -10,7 +9,11 @@ from typing import List, Optional, Tuple, Union
 
 import qutip as qt
 
-from .operators import calculate_correction_angle, get_squeezing_operator, optimal_theta
+from .operators import (
+    _calculate_correction_angle,
+    get_squeezing_operator,
+    optimal_theta,
+)
 from .states import generate_coherent_state
 
 
@@ -42,20 +45,16 @@ class Experiment:
     evolved_squeezed_state: Optional[QState] = None
 
 
-def calculate_phase_noise(N_max: int, omega: float,
-                          tau_sense: float) -> List[Experiment]:
+def calculate_phase_noise(N_max: int) -> List[Experiment]:
     """Calculate phase variances for separable and entangled states.
     
-    Computes the phase estimation variance for both SQL (Standard Quantum Limit)
-    and HL (Heisenberg Limit) strategies for various particle numbers.
+    Computes the phase variance/noise for 1..N_Max number of spin particles.
     
     Args:
-        N_max: Maximum number of particles to consider
-        omega: Frequency for sensing
-        tau_sense: Sensing time duration
+        N_max: Maximum number of particles
         
     Returns:
-        List of Experiment: Array of Experiment objects which contains parameters of the experiment and its 
+        List of Experiment: Array of Experiment containing parameters of the experiment and its 
         results.
     """
     experiments = []
@@ -75,16 +74,16 @@ def calculate_phase_noise(N_max: int, omega: float,
         experiment.initial_axis = Jx
         experiment.measurement_axis = Jz
 
-        experiment.v = calculate_correction_angle(j, experiment.mu)
+        experiment.v = _calculate_correction_angle(j, experiment.mu)
 
         # Generate initial coherent state
         experiment.coherent_state = QState(generate_coherent_state(j))
         experiment.coherent_state.variance = qt.variance(
             experiment.measurement_axis, experiment.coherent_state)
 
-        H_sense = omega * Jz
+        H_sense = Jz
         experiment.evolved_coherent_state = (
-            -1j * H_sense * tau_sense).expm() * experiment.coherent_state
+            -1j * H_sense).expm() * experiment.coherent_state
 
         experiment.evolved_coherent_state.variance = qt.variance(
             experiment.measurement_axis, experiment.evolved_coherent_state)
@@ -100,7 +99,7 @@ def calculate_phase_noise(N_max: int, omega: float,
             experiment.measurement_axis, experiment.squeezed_state)
 
         experiment.evolved_squeezed_state = QState(
-            (-1j * H_sense * tau_sense).expm() * experiment.squeezed_state)
+            (-1j * H_sense).expm() * experiment.squeezed_state)
 
         experiment.evolved_squeezed_state.variance = qt.variance(
             experiment.measurement_axis, experiment.evolved_squeezed_state)
