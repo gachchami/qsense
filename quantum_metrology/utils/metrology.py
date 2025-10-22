@@ -81,7 +81,7 @@ def calculate_phase_noise(N_max: int) -> List[Experiment]:
         experiment.coherent_state.variance = qt.variance(
             experiment.measurement_axis, experiment.coherent_state)
 
-        H_sense = Jz
+        H_sense = -Jy
         experiment.evolved_coherent_state = (
             -1j * H_sense).expm() * experiment.coherent_state
 

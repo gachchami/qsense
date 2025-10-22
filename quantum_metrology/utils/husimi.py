@@ -64,7 +64,6 @@ def plot_husimi_bloch(
     theta = np.linspace(0, np.pi, n_theta)
     phi = np.linspace(0, 2 * np.pi, n_phi)
     TH, PH = np.meshgrid(theta, phi, indexing="ij")  # (n_theta, n_phi)
-    # fig = plt.figure(figsize=(12, 8), facecolor="w")
     # ---- coefficients c_m(θ,φ) ----------------------------------------
     cos_th2 = np.cos(TH / 2)[..., None]  # add m-axis
     sin_th2 = np.sin(TH / 2)[..., None]

@@ -44,8 +44,8 @@ def plot_noise_reduction(N_max: int, experiments: List[Experiment]) -> None:
     # Create figure for both plots
     plt.figure(figsize=(12, 6))
     for experiment in experiments:
-        phase_noise_sql.append(experiment.evolved_coherent_state.variance)
-        phase_noise_hl.append(experiment.evolved_squeezed_state.variance)
+        phase_noise_sql.append(experiment.coherent_state.variance)
+        phase_noise_hl.append(experiment.squeezed_state.variance)
 
     # Phase noise plot
     plt.subplot(1, 2, 1)
@@ -92,13 +92,13 @@ def plot_sensitivity(N_max: int, experiments: List[Experiment]) -> None:
     for experiment in experiments:
 
         evolved_css_sentivity = math.sqrt(
-            experiment.evolved_coherent_state.variance) / mean(
-                experiment.N / 2, experiment.evolved_coherent_state)
+            experiment.coherent_state.variance) / mean(
+                experiment.N / 2, experiment.coherent_state)
 
         phase_sensitivity_sql.append(evolved_css_sentivity)
 
         evolved_sss_sensitivity = math.sqrt(
-            experiment.evolved_squeezed_state.variance) / mean(
+            experiment.squeezed_state.variance) / mean(
                 experiment.N / 2, experiment.squeezed_state)
         phase_sensitivity_hl.append(evolved_sss_sensitivity)
 
